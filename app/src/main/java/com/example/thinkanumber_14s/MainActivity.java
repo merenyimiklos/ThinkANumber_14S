@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-        //ujJatek();
+        ujJatek();
 
         buttonTipp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                             "A gondolt szám nagyobb", Toast.LENGTH_SHORT).show();
                     eletLevon();
                 } else {
-                    //játék végét megváltoztatni (setTitle - Nyertél)
+                    builderJatekVege.setTitle("Nyertél").create();
                     builderJatekVege.show();
                 }
             }
@@ -76,6 +76,52 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        buttonKonnyu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nehezseg = false;
+                builderNehezseg.setTitle("Könnyű");
+                builderNehezseg.create();
+                builderNehezseg.show();
+            }
+        });
+
+        buttonNehez.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nehezseg = true;
+                builderNehezseg.setTitle("Nehéz");
+                builderNehezseg.create();
+                builderNehezseg.show();
+            }
+        });
+    }
+
+    private void ujJatek() {
+        //Kezdeti értékek az Integereknek:
+        maxSzam = 10;
+        Random random = new Random();
+        gondoltSzam = random.nextInt(maxSzam) + 1;
+        elet = 3;
+        tippeltSzam = 1;
+        textViewTipp.setText(String.valueOf(tippeltSzam));
+        imageViewElet1.setImageResource(R.drawable.heart2);
+        imageViewElet2.setImageResource(R.drawable.heart2);
+        imageViewElet3.setImageResource(R.drawable.heart2);
+        imageViewElet4.setImageResource(R.drawable.heart2);
+        imageViewElet5.setImageResource(R.drawable.heart2);
+        if (nehezseg) {
+            maxSzam = 40;
+            gondoltSzam = random.nextInt(maxSzam) + 1;
+            elet = 5;
+            tippeltSzam = 0;
+            imageViewElet4.setVisibility(View.VISIBLE);
+            imageViewElet5.setVisibility(View.VISIBLE);
+        } else {
+            imageViewElet4.setVisibility(View.GONE);
+            imageViewElet5.setVisibility(View.GONE);
+        }
     }
 
     private void eletLevon() {
@@ -102,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         }
         elet--;
         if (elet < 1) {
-            //játék végét megváltoztatni (setTitle - Vesztettél)
+            builderJatekVege.setTitle("Vesztettél").create();
             builderJatekVege.show();
         }
     }
@@ -122,12 +168,9 @@ public class MainActivity extends AppCompatActivity {
         buttonNehez = findViewById(R.id.buttonNehez);
         buttonNovel = findViewById(R.id.buttonNovel);
         buttonTipp = findViewById(R.id.buttonTipp);
-        //Kezdeti értékek az Integereknek:
-        maxSzam = 10;
-        Random random = new Random();
-        gondoltSzam = random.nextInt(maxSzam) + 1;
-        elet = 5;
-        tippeltSzam = 0;
+
+        //Nehézség beállítása
+        nehezseg = false;
         //Játékvége felugró ablak megalkotása
         builderJatekVege = new AlertDialog.Builder(MainActivity.this);
         builderJatekVege.setCancelable(false)
@@ -142,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //ujJatek();
+                        ujJatek();
                     }
                 })
                 .create();
@@ -160,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        nehezseg = true;
-                        //ujJatek();
+                        ujJatek();
                     }
                 })
                 .create();
